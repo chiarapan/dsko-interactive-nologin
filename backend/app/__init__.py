@@ -28,7 +28,10 @@ def create_app(testing=False):
 
     app = Flask(__name__)
 
-    cors_origins = os.getenv("CORS_ORIGINS", "*")
+    cors_origins = os.getenv(
+        "CORS_ORIGINS",
+        "https://dsko-interactive-nologin-frontend.onrender.com"
+    )
     if cors_origins.strip() == "*":
         origins = "*"
     else:
