@@ -21,6 +21,8 @@ rustup default stable
 
 python -m pip install --upgrade pip setuptools wheel maturin
 
+# Pre-install spglib from wheel if available to avoid meson/Fortran compilation on Render.
+pip install --prefer-binary "spglib>=2.0.2"
+
 # Install backend requirements using binary packages when available.
-# Render build environments may not allow apt-get, so avoid forcing system package installs.
 pip install -r backend/requirements.txt --prefer-binary
