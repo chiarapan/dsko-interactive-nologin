@@ -119,5 +119,26 @@ Full API documentation is available at `http://localhost:5000/docs` when running
 
 2. **Deploy the backend**: Follow your preferred deployment method (Docker, Heroku, supabase, etc.)
 
+### Deploying on Render
+
+This repository includes a `render.yaml` manifest for Render deployment.
+
+- Backend service
+  - Build command: `bash backend/render-build.sh`
+  - Start command: `gunicorn 'app:create_app()' --bind 0.0.0.0:$PORT --workers 1`
+  - Set these environment variables in Render:
+    - `DB_USER`
+    - `DB_PASSWORD`
+    - `DB_HOST`
+    - `DB_PORT`
+    - `DB_NAME`
+    - `CORS_ORIGINS` (recommended: your frontend URL; default is `*`)
+
+- Frontend service
+  - Build command: `cd frontend && npm ci && npm run build`
+  - Publish path: `frontend/build`
+  - Set `REACT_APP_API_BASE_URL` to the backend URL provided by Render.
+
+If you connect this repo to Render, the `render.yaml` file will configure both services automatically.
 
 

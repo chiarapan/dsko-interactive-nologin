@@ -40,6 +40,18 @@ DB_PORT=5432
 DB_NAME=bs
 ```
 
+### Render Deployment Notes
+
+When deploying the backend on Render, the same database settings should be configured as environment variables in the Render dashboard. The repo also includes a top-level `render.yaml` manifest for a backend web service.
+
+Required Render environment variables:
+- `DB_USER`
+- `DB_PASSWORD`
+- `DB_HOST`
+- `DB_PORT`
+- `DB_NAME`
+- `CORS_ORIGINS` (recommended: the deployed frontend URL; default is `*`)
+
 ### Start Server
 
 - To run the backend use `flask run`

@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: dsko-backend
+    env: python
+    plan: free
+    buildCommand: bash backend/render-build.sh
+    startCommand: gunicorn 'app:create_app()' --bind 0.0.0.0:$PORT --workers 1
+    envVars:
+      - key: CORS_ORIGINS
+        value: "*"
+      # Set DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME in the Render dashboard secrets.
+
+  - type: static_site
+    name: dsko-frontend
+    plan: free
+    buildCommand: cd frontend && npm ci && npm run build
+    publishPath: frontend/build
+    envVars:
+      - key: REACT_APP_API_BASE_URL
+        value: "https://<your-backend-service>.onrender.com"
