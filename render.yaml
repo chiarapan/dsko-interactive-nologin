@@ -6,7 +6,7 @@ services:
     dockerfilePath: backend/Dockerfile
     envVars:
       - key: CORS_ORIGINS
-        value: "*"
+        value: "https://dsko-interactive-nologin-frontend.onrender.com"
       # Set DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME in the Render dashboard secrets.
 
   - type: static_site
