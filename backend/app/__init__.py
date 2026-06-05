@@ -39,18 +39,37 @@ def create_app(testing=False):
     db_user = os.getenv("DB_USER")
     db_password = os.getenv("DB_PASSWORD")
     db_host = os.getenv("DB_HOST")
-    db_port = os.getenv("DB_PORT", "5432")
+    db_port = os.getenv("DB_PORT")
     db_name = os.getenv("DB_NAME")
 
+    # Normalize DB port: if empty or unset, fall back to default 5432
+    if not db_port or not str(db_port).strip():
+        db_port = "5432"
+
+    # Allow an explicit full SQLALCHEMY_DATABASE_URI to override individual vars.
+    explicit_sqlalchemy_uri = os.getenv("SQLALCHEMY_DATABASE_URI")
+
     if testing:
-        app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
-            "SQLALCHEMY_DATABASE_URI",
+        app.config["SQLALCHEMY_DATABASE_URI"] = explicit_sqlalchemy_uri or (
             f"postgresql+psycopg2://testuser:testpass@localhost:5432/testdb"
         )
     else:
-        app.config["SQLALCHEMY_DATABASE_URI"] = (
-            f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
-        )
+        if explicit_sqlalchemy_uri and explicit_sqlalchemy_uri.strip():
+            app.config["SQLALCHEMY_DATABASE_URI"] = explicit_sqlalchemy_uri
+        else:
+            missing = [k for k, v in (
+                ("DB_USER", db_user),
+                ("DB_PASSWORD", db_password),
+                ("DB_HOST", db_host),
+                ("DB_NAME", db_name),
+            ) if not v]
+            if missing:
+                logger.error("Missing required DB env vars: %s", ",".join(missing))
+                raise RuntimeError(f"Missing DB env vars: {', '.join(missing)}")
+
+            app.config["SQLALCHEMY_DATABASE_URI"] = (
+                f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+            )
 
     db.init_app(app)
     migrate.init_app(app, db)
