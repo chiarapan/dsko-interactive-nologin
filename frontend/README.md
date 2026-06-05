@@ -18,6 +18,15 @@ REACT_APP_API_BASE_URL=http://localhost:5000
 
 This environment variable defines the backend API endpoint. Replace the value with the actual address where the backend is running. For example, use `http://localhost:5000` for local development, or the deployed URL (e.g., Render) in production.
 
+For local backend testing, you can also add:
+
+```bash
+CORS_ORIGINS=http://localhost:3000
+FLASK_DEBUG=1
+```
+
+`FLASK_ENV` is not required for Flask 3.x and later; prefer `FLASK_DEBUG` only for local development.
+
 ## Run the Development Server
 
 ```bash

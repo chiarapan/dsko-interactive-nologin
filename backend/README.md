@@ -38,7 +38,12 @@ DB_PASSWORD=admin
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=bs
+REACT_APP_API_BASE_URL=http://localhost:5000
+CORS_ORIGINS=http://localhost:3000
+FLASK_DEBUG=1
 ```
+
+**Note:** `FLASK_ENV` is no longer relevant in modern Flask versions. Use `FLASK_DEBUG=1` only for local development, and do not set it in production.
 
 ### Render Deployment Notes
 

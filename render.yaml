@@ -16,4 +16,4 @@ services:
     publishPath: frontend/build
     envVars:
       - key: REACT_APP_API_BASE_URL
-        value: "https://dsko-interactive-backend.onrender.com"
+        value: "https://dsko-interactive-nologin.onrender.com"
