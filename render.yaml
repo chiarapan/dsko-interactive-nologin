@@ -2,6 +2,7 @@ services:
   - type: web
     name: dsko-backend
     env: python
+    pythonVersion: 3.11
     plan: free
     buildCommand: bash backend/render-build.sh
     startCommand: gunicorn 'app:create_app()' --bind 0.0.0.0:$PORT --workers 1
