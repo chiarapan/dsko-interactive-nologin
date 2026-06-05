@@ -28,17 +28,7 @@ def create_app(testing=False):
 
     app = Flask(__name__)
 
-    cors_origins = os.getenv(
-        "CORS_ORIGINS",
-        "https://dsko-interactive-nologin-frontend.onrender.com"
-    )
-    if cors_origins.strip() == "*":
-        origins = "*"
-    else:
-        origins = [origin.strip() for origin in cors_origins.split(",") if origin.strip()]
-
-    CORS(app, resources={r"/*": {"origins": origins}})
-
+    CORS(app, resources={r"/*": {"origins": ["https://dsko-interactive-nologin-frontend.onrender.com", "http://localhost:*"]}})
     db_user = os.getenv("DB_USER")
     db_password = os.getenv("DB_PASSWORD")
     db_host = os.getenv("DB_HOST")
