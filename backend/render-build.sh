@@ -12,8 +12,12 @@ export PATH="$CARGO_HOME/bin:$PATH"
 if ! command -v rustup >/dev/null 2>&1; then
   curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
   source "$HOME/.cargo/env" || true
-  rustup default stable
 fi
+
+# Ensure stable toolchain is installed and selected
+source "$HOME/.cargo/env" || true
+rustup toolchain install stable
+rustup default stable
 
 python -m pip install --upgrade pip setuptools wheel maturin
 
