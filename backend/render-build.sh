@@ -18,4 +18,4 @@ fi
 python -m pip install --upgrade pip setuptools wheel maturin
 
 # Install backend requirements (assumes backend/requirements.txt exists)
-pip install -r backend/requirements.txt
+pip install -r backend/requirements_minimal.txt
