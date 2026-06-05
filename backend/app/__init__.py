@@ -1,6 +1,6 @@
 import os
 import logging
-from flask import Flask
+from flask import Flask, request
 from extensions import db, migrate
 from app.api import api
 from flask_cors import CORS
@@ -28,7 +28,28 @@ def create_app(testing=False):
 
     app = Flask(__name__)
 
-    CORS(app, resources={r"/*": {"origins": ["https://dsko-interactive-nologin-frontend.onrender.com", "http://localhost:*"]}})
+    cors_origins = os.getenv(
+        "CORS_ORIGINS",
+        "https://dsko-interactive-nologin-frontend.onrender.com"
+    )
+    if cors_origins.strip() == "*":
+        origins = "*"
+    else:
+        origins = [origin.strip() for origin in cors_origins.split(",") if origin.strip()]
+
+    logger.info("Configured CORS origins: %s", origins)
+    CORS(app, resources={r"/*": {"origins": origins}})
+
+    @app.after_request
+    def apply_cors(response):
+        origin = request.headers.get("Origin")
+        if origin and (origins == "*" or origin in origins):
+            response.headers["Access-Control-Allow-Origin"] = origin if origins != "*" else "*"
+            response.headers["Vary"] = "Origin"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+        return response
+
     db_user = os.getenv("DB_USER")
     db_password = os.getenv("DB_PASSWORD")
     db_host = os.getenv("DB_HOST")
